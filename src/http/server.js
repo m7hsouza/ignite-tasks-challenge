@@ -29,6 +29,10 @@ const server = createServer(async function (request, response) {
         })
       )
     }
+
+    if (method.toUpperCase() === 'GET') {
+      return response.end(JSON.stringify(tasks))
+    }
   }
 
   return response.writeHead(404).end('not found')
