@@ -1,42 +1,30 @@
 import { createServer } from 'node:http'
-import { randomUUID } from 'node:crypto'
 
 import { json } from './middlewares/json.js'
+import { createTask } from './routes/create-task.js'
+import { listTasks } from './routes/list-tasks.js'
 
 const tasks = []
+
+const routes = [
+  createTask,
+  listTasks,
+]
 
 const server = createServer(async function (request, response) {
   await json(request, response)
 
   const { method, url: path } = request
 
-  if (path === '/tasks') {
-    if (method.toUpperCase() === 'POST') {
-      const { title, description } = request.body
-      const now = new Date()
-      const task = {
-        id: randomUUID(),
-        title,
-        description,
-        completedAt: null,
-        createdAt: now,
-        updatedAt: now
-      }
-      tasks.push(task)
-      return response.writeHead(201).end(
-        JSON.stringify({
-          taskId: task.id
-        })
-      )
-    }
+  const route = routes.find(
+    route => route.method === method && route.path
+  )
 
-    if (method.toUpperCase() === 'GET') {
-      return response.end(JSON.stringify(tasks))
-    }
+  if (!route) {
+    return response.writeHead(404).end('not found')
   }
 
-  return response.writeHead(404).end('not found')
-
+  return route.handler(request, response);
 })
 
 server.listen(3333)
