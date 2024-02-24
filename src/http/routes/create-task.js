@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto'
 
 import { connection } from '../database/connection.js'
+import { buildRoutePath } from '../../utils/build-route-path.js'
 
 export const createTask = {
   method: 'POST',
-  path: '/tasks',
+  path: buildRoutePath('/tasks'),
   handler: function (request, response) {
     const { title, description } = request.body
     const now = new Date()
