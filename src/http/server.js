@@ -5,12 +5,14 @@ import { createTask } from './routes/create-task.js'
 import { listTasks } from './routes/list-tasks.js'
 import { updateTask } from './routes/update-tasks.js'
 import { deleteTask } from './routes/delete-task.js'
+import { completeTask } from './routes/complete-task.js'
 
 const routes = [
   createTask,
   listTasks,
   updateTask,
-  deleteTask
+  deleteTask,
+  completeTask,
 ]
 
 const server = createServer(async function (request, response) {
