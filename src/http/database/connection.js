@@ -40,6 +40,20 @@ class Connection {
     
     await this.#persist()
   }
+
+  async delete (table, id) {
+    if (!this.#tables[table]) {
+      throw new Error(`A tabela \`${table}\` não existe no banco de dados`)
+    }
+    const index = this.#tables[table].findIndex(row => row.id === id)
+    if (index < 0) {
+      return
+    }
+
+    this.#tables[table].splice(index, 1)
+    
+    await this.#persist()
+  }
 }
 
 
