@@ -26,6 +26,20 @@ class Connection {
   select (table) {
     return this.#tables[table] ?? []
   }
+
+  async update (table, id, data) {
+    if (!this.#tables[table]) {
+      throw new Error(`A tabela \`${table}\` não existe no banco de dados`)
+    }
+    const index = this.#tables[table].findIndex(row => row.id === id)
+    if (index < 0) {
+      return
+    }
+
+    Object.assign(this.#tables[table][index], data)
+    
+    await this.#persist()
+  }
 }
 
 

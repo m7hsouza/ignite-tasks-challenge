@@ -5,8 +5,6 @@ import { createTask } from './routes/create-task.js'
 import { listTasks } from './routes/list-tasks.js'
 import { updateTask } from './routes/update-tasks.js'
 
-const tasks = []
-
 const routes = [
   createTask,
   listTasks,
@@ -25,7 +23,8 @@ const server = createServer(async function (request, response) {
   if (!route) {
     return response.writeHead(404).end('not found')
   }
-  const { ...params } = path.match(route.path).groups
+
+  const { ...params } = path.match(route.path).groups ?? {}
   Object.assign(request,{
     params
   })
